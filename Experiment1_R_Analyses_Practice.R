@@ -66,6 +66,6 @@ Tatt_in_Any_by_Describe_Before_by_Feedback
 
 ftable(Tatt_in_Any_by_Describe_Before_by_Feedback)
 
-data.frame(Tatt_in_Any_by_Lineup_Condition)
+data.frame(Tatt_in_Any_by_Describe_Before_by_Feedback)
 
 
