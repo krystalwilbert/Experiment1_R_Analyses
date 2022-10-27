@@ -1,4 +1,4 @@
-# Install and load Packages.
+# Install and load Packages
 
 install.packages("tidyverse")
 install.packages("ggplot2")
@@ -7,46 +7,63 @@ library(tidyverse)
 library(ggplot2)
 library(dplyr)
 
-# Assign the data to an object. We'll name our object "Experiment_1_Data".
+# Assign the data to an object. We'll name our object "Experiment_1_Data"
 
 Experiment_1_Data <- read.csv("Experiment1_10.11.22.csv")
 
-# In order to view the data we're working with, use the function "View()".
+# In order to view the data we're working with, use the function "View()"
 
 View(Experiment_1_Data)
 
-# Assign the DQ.Attention.Check variable to an object.
-# We'll name our object "DQ_Hair_Color".
+# Assign the DQ.Attention.Check variable to an object
+# We'll name our object "DQ_Hair_Color"
 
 DQ_Hair_Color <- Experiment_1_Data %>%
   select(DQ.Attention.Check)
 
-# In order to view the new object, use the function "View()".
+# In order to view the new object, use the function "View()"
 
 View(DQ_Hair_Color)
 
-# Filter the data and call it "Experiment_1_Data_Filtered".
+# Filter the data and call it "Experiment_1_Data_Filtered"
 
 Experiment_1_Data_Filtered <- Experiment_1_Data %>%
   filter(DQ_Hair_Color == 5)
 
-# In order to view our new FILTERED dataset, use the function "View()".
+# In order to view our new FILTERED dataset, use the function "View()"
 
 View(Experiment_1_Data_Filtered)
 
-attach(Experiment_1_Data_Filtered)
+# Assign the Tatt.in.Any variable to an object-- we'll call it "Tatt_in_Any"
 
 Tatt_in_Any <- Experiment_1_Data_Filtered %>%
   select(Tatt.in.Any)
 
+# Assign the Lineup.Condition variable to an object-- we'll call it "Tatt_in_Any"
+
 Lineup_Condition <- Experiment_1_Data_Filtered %>%
   select(Lineup.Condition)
 
+# If you want to select two variables and make it into an object do the following: 
+
+Lineup_Condition_and_Tatt_in_any <- Experiment_1_Data_Filtered %>%
+  select(Lineup.Condition, Tatt.in.Any)
+
+
+# In order to view these datasets, use the function "View()"
+
+View(Tatt_in_Any)
+View(Lineup_Condition)
+View(Lineup_Condition_and_Tatt_in_any)
+
 # In order to make a crosstabs table, use the function...
 # ... table name <-  table(A,B)
-# A is rows, B is columns.
+# A is rows, B is columns
 
 Tatt_in_Any_by_Lineup_Condition <- table(Experiment_1_Data_Filtered$Tatt.in.Any, Experiment_1_Data_Filtered$Lineup.Condition)
+
+
+
 
 Tatt_in_Any_by_Lineup_Condition
 
