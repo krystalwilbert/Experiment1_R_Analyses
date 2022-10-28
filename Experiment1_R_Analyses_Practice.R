@@ -1,15 +1,18 @@
-R.Version()
-# Install and load Packages
+# Install packages
 
 install.packages("tidyverse")
 install.packages("ggplot2")
 install.packages("dplyr")
 install.packages("gmodels")
+install.packages("aod")
+
+# Load packages
 
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
 library(gmodels)
+library(aod)
 
 # Assign the data to an object. We'll name our object "Experiment_1_Data"
 
@@ -119,3 +122,11 @@ xtabs(~ Tatt.in.Any + Describe.Before + Feedback, data = Experiment_1_Data_Filte
 
 Tatt_in_Any_by_Lineup_Condition_Proportions <- prop.table(Tatt_in_Any_by_Lineup_Condition)
 Tatt_in_Any_by_Lineup_Condition_Proportions
+
+
+## Logistic Analyses
+# https://stats.oarc.ucla.edu/r/dae/logit-regression/
+
+glm(Experiment_1_Data_Filtered$Tatt.in.Any ~ Experiment_1_Data_Filtered$Describe.Before + 
+      Experiment_1_Data_Filtered$Feedback +Experiment_1_Data_Filtered$Lineup.Condition, data = Experiment_1_Data_Filtered)
+
