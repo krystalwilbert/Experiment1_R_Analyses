@@ -5,6 +5,12 @@ install.packages("ggplot2")
 install.packages("dplyr")
 install.packages("gmodels")
 install.packages("aod")
+install.packages("scales")
+install.packages("stringr")
+install.packages("ggthemes")
+install.packages("janitor")
+install.packages("CGPfunctions")
+install.packages("vtree")
 
 # Load packages
 
@@ -13,6 +19,12 @@ library(ggplot2)
 library(dplyr)
 library(gmodels)
 library(aod)
+library(scales)
+library(stringr)
+library(ggthemes)
+library(janitor)
+library(CGPfunctions)
+library(vtree)
 
 # Assign the data to an object. We'll name our object "Experiment_1_Data"
 
@@ -97,6 +109,8 @@ CrossTable(Experiment_1_Data_Filtered$Tatt.in.Any,
            fisher = FALSE, mcnemar = FALSE, 
            missing.include = FALSE)
 
+
+
 ### digits: # of decimals
 ### expected: shows expected frequencies
 ### prop.r: row proportions
@@ -114,19 +128,59 @@ CrossTable(Experiment_1_Data_Filtered$Tatt.in.Any, Experiment_1_Data_Filtered$Li
            expected = FALSE, prop.r = FALSE, prop.c = FALSE, prop.t = FALSE, prop.chisq = FALSE, chisq = FALSE,
            fisher = FALSE, mcnemar = FALSE, missing.include = FALSE)
 
+## Using Janitor
+tabyl(Experiment_1_Data_Filtered, Tatt.in.Any, Lineup.Condition)
+
+tabyl(Experiment_1_Data_Filtered, Tatt.in.Any, Lineup.Condition) %>%
+  adorn_percentages("col") %>%
+  adorn_pct_formatting(digits = 1)
+
+
+tabyl(Experiment_1_Data_Filtered, Tatt.in.Any, Lineup.Condition) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits = 1)
+
+tabyl(Experiment_1_Data_Filtered, Tatt.in.Any, Describe.Before, Feedback)
+
+# Using CGP functions
+
+CGPfunctions::PlotXTabs(Experiment_1_Data_Filtered, Tatt.in.Any, Lineup.Condition)
+CGPfunctions::PlotXTabs2(Experiment_1_Data_Filtered, Tatt.in.Any, Lineup.Condition, results.subtitle = FALSE)
+
 # Using xtabs
 
 Tatt_in_Any_by_Lineup_Condition <- xtabs(~ Tatt.in.Any + Lineup.Condition, data = Experiment_1_Data_Filtered)
 xtabs(~ Tatt.in.Any + Describe.Before + Feedback, data = Experiment_1_Data_Filtered)
 
+Tatt_by_Lineup <- xtabs(~ Tatt.in.Any + Lineup.Condition, data = Experiment_1_Data_Filtered)
 
 Tatt_in_Any_by_Lineup_Condition_Proportions <- prop.table(Tatt_in_Any_by_Lineup_Condition)
 Tatt_in_Any_by_Lineup_Condition_Proportions
+
+#Using Vtree
+vtree(Experiment_1_Data_Filtered, "Tatt.in.Any")
+
+vtree(Experiment_1_Data_Filtered, "Tatt.in.Any", palette = 3)
+
+vtree(Experiment_1_Data_Filtered, c ("Tatt.in.Any", "Lineup.Condition"))
+
+vtree(Experiment_1_Data_Filtered, c ("Tatt.in.Any", "Describe.Before", "Feedback"))
+
+# Make into a data frame
+Tatt_by_Lineup_Data_Frame <- as.data.frame(Tatt_by_Lineup)
+
+# Look at data frame
+glimpse(Tatt_by_Lineup_Data_Frame)
+
+# Make bar graph
+ggplot(Tatt_by_Lineup_Data_Frame, aes(x = Tatt.in.Any, y = Freq, fill = Lineup.Condition)) +
+  geom_col(position = "dodge") +
+  labs(title = "Frequency of People who Recalled a Tattoo by Lineup Condition") 
 
 
 ## Logistic Analyses
 # https://stats.oarc.ucla.edu/r/dae/logit-regression/
 
 glm(Experiment_1_Data_Filtered$Tatt.in.Any ~ Experiment_1_Data_Filtered$Describe.Before + 
-      Experiment_1_Data_Filtered$Feedback +Experiment_1_Data_Filtered$Lineup.Condition, data = Experiment_1_Data_Filtered)
+      Experiment_1_Data_Filtered$Feedback + Experiment_1_Data_Filtered$Lineup.Condition, data = Experiment_1_Data_Filtered)
 
