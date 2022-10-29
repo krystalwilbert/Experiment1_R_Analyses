@@ -96,8 +96,6 @@ data.frame(Tatt_in_Any_by_Describe_Before_by_Feedback)
 
 
 
-
-
 ## CrossTables
 require(gmodels)
 
@@ -165,6 +163,8 @@ vtree(Experiment_1_Data_Filtered, "Tatt.in.Any", palette = 3)
 vtree(Experiment_1_Data_Filtered, c ("Tatt.in.Any", "Lineup.Condition"))
 
 vtree(Experiment_1_Data_Filtered, c ("Tatt.in.Any", "Describe.Before", "Feedback"))
+
+vtree(Experiment_1_Data_Filtered, c ("Feedback", "Describe.Before", "Tatt.in.Any"))
 
 # Make into a data frame
 Tatt_by_Lineup_Data_Frame <- as.data.frame(Tatt_by_Lineup)
