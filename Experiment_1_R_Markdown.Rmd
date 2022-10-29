@@ -1,0 +1,226 @@
+---
+title: "Experiment 1 R Analyses"
+author: "Krystal A. Wilbert"
+date: "November 1, 2022"
+output: 
+  prettydoc::html_pretty:
+    theme: "cayman"
+    TOC: true
+---
+
+## Installing and Loading Packages
+
+When using R, it's important to make sure you install and load the packages that you'll be using before you run any analyses. Common packages include "tidyverse", "ggplot2", and "dplyr". Remember, you only need to install a package once. If you've already installed a package, call it using the "library()" function as shown below.
+
+```{r setup, include=TRUE, message=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(gmodels)
+library(aod)
+library(scales)
+library(stringr)
+library(ggthemes)
+library(janitor)
+library(CGPfunctions)
+library(vtree)
+library(kableExtra)
+```
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE)
+```
+
+## Assigning Data to an Object
+
+In order for us to be able to easily access our data, I'll first assign it to an object.
+
+```{r, include=TRUE}
+Experiment_1_Data <- read.csv("Experiment1_10.11.22.csv")
+```
+
+Then, to view the object, use the function View().
+
+```{r, include=TRUE}
+View(Experiment_1_Data)
+```
+
+## Looking at Our Data
+
+One way to look at the data in a Rmd is by using a kable table.
+
+
+```{r, echo=TRUE}
+Experiment_1_Data %>%
+  kable %>%
+   kable_styling("bordered", full_width = FALSE) %>%
+    row_spec(0, bold = TRUE, color = "white", background = "#179957") %>%
+    scroll_box(width = "900px", height = "500px")
+```
+
+
+## Diving Deeper
+
+Because our data has a lot of information, we can use the "select()" function to look at a single column. This essentially creates a new data frame we can look at with the variable that we select.
+
+```{r, include=TRUE}
+DQ_Hair_Color <- Experiment_1_Data %>%
+  select(DQ.Attention.Check)
+
+View(DQ_Hair_Color)
+
+DQ_Hair_Color %>%
+  kable %>%
+   kable_styling("bordered", full_width = FALSE) %>%
+    row_spec(0, bold = TRUE, color = "white", background = "#179957") %>%
+    scroll_box(width = "200px", height = "500px")
+```
+
+
+## Filtering the Data
+
+Once we've made sure we're looking at the correct data, we can select and filter our data by using the "filter()" function. This function will filter the dataset and allow us to look at only the observations that met any given condition. This is the data frame we will use for the majority of our analyses.
+
+```{r, include=TRUE}
+Experiment_1_Data_Filtered <- Experiment_1_Data %>%
+  filter(DQ_Hair_Color == 5)
+```
+
+## Looking at the Filtered Data
+
+Just as before, we can use the kable function to make a table to look at our data.
+
+```{r, echo=TRUE}
+Experiment_1_Data_Filtered %>%
+  kable %>%
+   kable_styling("bordered", full_width = FALSE) %>%
+    row_spec(0, bold = TRUE, color = "white", background = "#179957") %>%
+    scroll_box(width = "900px", height = "500px")
+```
+
+
+## Exploratory Analyses
+
+Now that we've filtered our data, we can mess around with different analyses.
+
+First, we'll look at making a basic table. We'll cross "Tatt.in.Any" by "Lineup.Condition".
+
+The function for doing this is table(A,B), where A is rows and B is columns.
+
+```{r, echo=TRUE}
+table(Experiment_1_Data_Filtered$Tatt.in.Any, Experiment_1_Data_Filtered$Lineup.Condition)
+```
+
+While the table prints out the correct information, it's difficult to understand.Let's do some more exploratory analyses.
+
+Next, we'll use the CrossTable function. The CrossTable function is good for 2x2 analyses and can compute a lot of information. Below you'll see the code for how to create one. The table will compute whatever is followed by a "= TRUE".
+
+Here's a guide on what each aspect of the function means:
+
+digits: # of decimals
+expected: shows expected frequencies
+prop.r: row proportions
+prop.c: column proportions
+prop.chisq: chi square contributions
+chisq: computes chi square test for association
+fisher: Fisher exact test
+mcnemar: computers the McNemar test (2x2 tables only)
+missing.include: if TRUE removes unused factor levels
+
+```{r, echo=TRUE}
+CrossTable(Experiment_1_Data_Filtered$Tatt.in.Any, 
+           Experiment_1_Data_Filtered$Lineup.Condition, digits = 3,
+           expected = FALSE, prop.r = TRUE, 
+           prop.c = TRUE, prop.t = FALSE, 
+           prop.chisq = FALSE, chisq = FALSE,
+           fisher = FALSE, mcnemar = FALSE, 
+           missing.include = FALSE)
+```
+
+If you simply want to look at the observed counts, change everything to "= FALSE"
+
+```{r, echo=TRUE}
+CrossTable(Experiment_1_Data_Filtered$Tatt.in.Any, 
+           Experiment_1_Data_Filtered$Lineup.Condition, digits = 3,
+           expected = FALSE, prop.r = FALSE, 
+           prop.c = FALSE, prop.t = FALSE, 
+           prop.chisq = FALSE, chisq = FALSE,
+           fisher = FALSE, mcnemar = FALSE, 
+           missing.include = FALSE)
+```
+
+
+We can also look at the data by using a bar chart.
+ 
+First, we'll use the xtabs function to assign "Tatt.in.Any" by "Lineup.Condition" to a object. We'll call this object "Tatt_by_Lineup".
+
+Second, we'll make "Tatt_by_Lineup" a data frame by using the "as.data.frame()" function.
+
+Finally, we'll use this data frame to make a bar chart.
+
+```{r, echo=TRUE}
+Tatt_by_Lineup <- xtabs(~ Tatt.in.Any + Lineup.Condition, data = Experiment_1_Data_Filtered)
+
+Tatt_by_Lineup_Data_Frame <- as.data.frame(Tatt_by_Lineup)
+
+ggplot(Tatt_by_Lineup_Data_Frame, aes(x = Tatt.in.Any, y = Freq, fill = Lineup.Condition)) +
+  geom_col(position = "dodge") +
+  labs(title = "Memory for a Tattoo by Lineup Condition", x = "Report of Tattoo", y = "Count", fill = "Lineup Condition") +
+  theme_classic() +
+  scale_fill_manual(values=c("lightgreen", "darkgreen"))
+```
+
+## Now that we've done "Tatt.in.Any" by "Lineup.Condition", we're going to add a layer. Since we're adding a layer, a bar plot is no longer a good way to visualize the data. Instead, we're going to use the function "vtree()" with the variables "Tatt.in.Any", "Describe.Before", and "Lineup.Condition".
+
+```{r, echo=TRUE}
+vtree(Experiment_1_Data_Filtered, c ("Lineup.Condition", 
+                                     "Describe.Before", 
+                                     "Tatt.in.Any"), 
+      labelvar=c(Tatt.in.Any = "Memory of Tattoo", 
+                 Lineup.Condition = "Lineup Condition", 
+                 Describe.Before = "Pre-ID Description"), 
+      horiz=FALSE)
+```
+
+## Now let's add "Feedback" to this function.
+
+```{r, echo=TRUE}
+vtree(Experiment_1_Data_Filtered, c ("Lineup.Condition",
+                              "Describe.Before",
+                              "Feedback",
+                              "Tatt.in.Any"), 
+      labelvar=c(Tatt.in.Any = "Memory of Tattoo", 
+                  Lineup.Condition = "Lineup Condition", 
+                 Describe.Before = "Pre-ID Description", 
+                 Feedback = "Feedback"), 
+      horiz=FALSE)
+```
+
+## We can take a step back now and look at the remember/know jusdements by lineup condition.
+
+```{r, echo=TRUE}
+Rem_Know_by_Lineup <- xtabs(~ Tat.RK_1_6 + Lineup.Condition, data = Experiment_1_Data_Filtered)
+
+Rem_Know_by_Lineup_Data_Frame <- as.data.frame(Rem_Know_by_Lineup)
+
+ggplot(Rem_Know_by_Lineup_Data_Frame, aes(x = Tat.RK_1_6, y = Freq, fill = Lineup.Condition), na.rm=TRUE) +
+  geom_col(position = "dodge") +
+  labs(title = "Remember/Know by Report of Tattoo", 
+       x = "Report of Tattoo", 
+       y = "Count", 
+       fill = "Lineup Condition") +
+  theme_classic() +
+  scale_fill_manual(values=c("lightgreen", "darkgreen"))
+```
+
+# Now let's look at Remember/Know Judements as a function of Lineup Condition and Pre-ID Description
+```{r, echo=TRUE}
+vtree(Experiment_1_Data_Filtered, 
+      c ("Tat.RK_1_6", 
+         "Describe.Before", 
+         "Lineup.Condition"), 
+      labelvar=c(Tat.RK_1_6 = "Remember/Know Judgement", 
+                  Lineup.Condition = "Lineup Condition", 
+                  Describe.Before = "Pre-ID Description"), 
+      horiz=FALSE)
+```
