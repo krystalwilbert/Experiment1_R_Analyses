@@ -75,6 +75,9 @@ View(Lineup_Condition)
 Tatt_in_Any_by_Lineup_Condition <- table(Experiment_1_Data_Filtered$Tatt.in.Any, 
                                          Experiment_1_Data_Filtered$Lineup.Condition)
 
+table(Experiment_1_Data_Filtered$Tatt.in.Any, 
+      Experiment_1_Data_Filtered$Lineup.Condition)
+
 
 Tatt_in_Any_by_Lineup_Condition
 
@@ -102,7 +105,7 @@ require(gmodels)
 CrossTable(Experiment_1_Data_Filtered$Tatt.in.Any, 
            Experiment_1_Data_Filtered$Lineup.Condition, digits = 3,
            expected = TRUE, prop.r = TRUE, 
-           prop.c = TRUE, prop.t = TRUE, 
+           prop.c = TRUE, prop.t = FALSE, 
            prop.chisq = TRUE, chisq = FALSE,
            fisher = FALSE, mcnemar = FALSE, 
            missing.include = FALSE)
@@ -141,13 +144,18 @@ tabyl(Experiment_1_Data_Filtered, Tatt.in.Any, Lineup.Condition) %>%
 tabyl(Experiment_1_Data_Filtered, Tatt.in.Any, Describe.Before, Feedback)
 
 # Using CGP functions
-
 CGPfunctions::PlotXTabs(Experiment_1_Data_Filtered, Tatt.in.Any, Lineup.Condition)
-CGPfunctions::PlotXTabs2(Experiment_1_Data_Filtered, Tatt.in.Any, Lineup.Condition, results.subtitle = FALSE)
+
+CGPfunctions::PlotXTabs(Experiment_1_Data_Filtered, Tatt.in.Any, Lineup.Condition) %>%
+  aes(x = Lineup_Condition, y = Frequency)
+
+
+CGPfunctions::PlotXTabs2(Experiment_1_Data_Filtered, Tatt.in.Any, Lineup.Condition, results.subtitle = TRUE)
 
 # Using xtabs
 
 Tatt_in_Any_by_Lineup_Condition <- xtabs(~ Tatt.in.Any + Lineup.Condition, data = Experiment_1_Data_Filtered)
+xtabs(~ Tatt.in.Any + Lineup.Condition, data = Experiment_1_Data_Filtered)
 xtabs(~ Tatt.in.Any + Describe.Before + Feedback, data = Experiment_1_Data_Filtered)
 
 Tatt_by_Lineup <- xtabs(~ Tatt.in.Any + Lineup.Condition, data = Experiment_1_Data_Filtered)
@@ -175,7 +183,9 @@ glimpse(Tatt_by_Lineup_Data_Frame)
 # Make bar graph
 ggplot(Tatt_by_Lineup_Data_Frame, aes(x = Tatt.in.Any, y = Freq, fill = Lineup.Condition)) +
   geom_col(position = "dodge") +
-  labs(title = "Frequency of People who Recalled a Tattoo by Lineup Condition") 
+  labs(title = "Memory for a Tattoo by Lineup Condition") +
+  theme_classic() +
+  scale_fill_manual(values=c("#008080", "#004D4D"))
 
 
 ## Logistic Analyses
@@ -183,4 +193,13 @@ ggplot(Tatt_by_Lineup_Data_Frame, aes(x = Tatt.in.Any, y = Freq, fill = Lineup.C
 
 glm(Experiment_1_Data_Filtered$Tatt.in.Any ~ Experiment_1_Data_Filtered$Describe.Before + 
       Experiment_1_Data_Filtered$Feedback + Experiment_1_Data_Filtered$Lineup.Condition, data = Experiment_1_Data_Filtered)
+## Barplot
+Tatt_by_Lineup_by_PreID <- xtabs(~ Tatt.in.Any + Lineup.Condition + Describe.Before, data = Experiment_1_Data_Filtered)
 
+Tatt_by_Lineup_by_PreID_Data_Frame <- as.data.frame(Tatt_by_Lineup_by_PreID)
+
+Tat.RK_1_6 <- Experiment_1_Data_Filtered$Tat.RK_1_6
+Tat.RK_1_6
+View(Tat.RK_1_6)
+
+vtree()

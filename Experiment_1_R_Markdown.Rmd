@@ -118,13 +118,21 @@ Next, we'll use the CrossTable function. The CrossTable function is good for 2x2
 Here's a guide on what each aspect of the function means:
 
 digits: # of decimals
+
 expected: shows expected frequencies
+
 prop.r: row proportions
+
 prop.c: column proportions
+
 prop.chisq: chi square contributions
+
 chisq: computes chi square test for association
+
 fisher: Fisher exact test
+
 mcnemar: computers the McNemar test (2x2 tables only)
+
 missing.include: if TRUE removes unused factor levels
 
 ```{r, echo=TRUE}
@@ -170,7 +178,7 @@ ggplot(Tatt_by_Lineup_Data_Frame, aes(x = Tatt.in.Any, y = Freq, fill = Lineup.C
   scale_fill_manual(values=c("lightgreen", "darkgreen"))
 ```
 
-## Now that we've done "Tatt.in.Any" by "Lineup.Condition", we're going to add a layer. Since we're adding a layer, a bar plot is no longer a good way to visualize the data. Instead, we're going to use the function "vtree()" with the variables "Tatt.in.Any", "Describe.Before", and "Lineup.Condition".
+Now that we've done "Tatt.in.Any" by "Lineup.Condition", we're going to add a layer. Since we're adding a layer, a bar plot is no longer a good way to visualize the data. Instead, we're going to use the function "vtree()" with the variables "Tatt.in.Any", "Describe.Before", and "Lineup.Condition".
 
 ```{r, echo=TRUE}
 vtree(Experiment_1_Data_Filtered, c ("Lineup.Condition", 
@@ -182,7 +190,7 @@ vtree(Experiment_1_Data_Filtered, c ("Lineup.Condition",
       horiz=FALSE)
 ```
 
-## Now let's add "Feedback" to this function.
+Now let's add "Feedback" to this function.
 
 ```{r, echo=TRUE}
 vtree(Experiment_1_Data_Filtered, c ("Lineup.Condition",
@@ -196,7 +204,7 @@ vtree(Experiment_1_Data_Filtered, c ("Lineup.Condition",
       horiz=FALSE)
 ```
 
-## We can take a step back now and look at the remember/know jusdements by lineup condition.
+We can take a step back now and look at the remember/know jusdements by lineup condition.
 
 ```{r, echo=TRUE}
 Rem_Know_by_Lineup <- xtabs(~ Tat.RK_1_6 + Lineup.Condition, data = Experiment_1_Data_Filtered)
@@ -213,7 +221,7 @@ ggplot(Rem_Know_by_Lineup_Data_Frame, aes(x = Tat.RK_1_6, y = Freq, fill = Lineu
   scale_fill_manual(values=c("lightgreen", "darkgreen"))
 ```
 
-# Now let's look at Remember/Know Judements as a function of Lineup Condition and Pre-ID Description
+Now let's look at Remember/Know Judements as a function of Lineup Condition and Pre-ID Description
 ```{r, echo=TRUE}
 vtree(Experiment_1_Data_Filtered, 
       c ("Tat.RK_1_6", 
