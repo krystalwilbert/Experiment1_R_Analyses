@@ -74,6 +74,7 @@ View(Lineup_Condition)
 
 Tatt_in_Any_by_Lineup_Condition <- table(Experiment_1_Data_Filtered$Tatt.in.Any, 
                                          Experiment_1_Data_Filtered$Lineup.Condition)
+Tatt_in_Any_by_Lineup_Condition
 
 table(Experiment_1_Data_Filtered$Tatt.in.Any, 
       Experiment_1_Data_Filtered$Lineup.Condition)
@@ -97,8 +98,6 @@ ftable(Tatt_in_Any_by_Describe_Before_by_Feedback)
 
 data.frame(Tatt_in_Any_by_Describe_Before_by_Feedback)
 
-
-
 ## CrossTables
 require(gmodels)
 
@@ -109,7 +108,6 @@ CrossTable(Experiment_1_Data_Filtered$Tatt.in.Any,
            prop.chisq = TRUE, chisq = FALSE,
            fisher = FALSE, mcnemar = FALSE, 
            missing.include = FALSE)
-
 
 
 ### digits: # of decimals
@@ -155,6 +153,7 @@ CGPfunctions::PlotXTabs2(Experiment_1_Data_Filtered, Tatt.in.Any, Lineup.Conditi
 # Using xtabs
 
 Tatt_in_Any_by_Lineup_Condition <- xtabs(~ Tatt.in.Any + Lineup.Condition, data = Experiment_1_Data_Filtered)
+
 xtabs(~ Tatt.in.Any + Lineup.Condition, data = Experiment_1_Data_Filtered)
 xtabs(~ Tatt.in.Any + Describe.Before + Feedback, data = Experiment_1_Data_Filtered)
 
@@ -193,6 +192,7 @@ ggplot(Tatt_by_Lineup_Data_Frame, aes(x = Tatt.in.Any, y = Freq, fill = Lineup.C
 
 glm(Experiment_1_Data_Filtered$Tatt.in.Any ~ Experiment_1_Data_Filtered$Describe.Before + 
       Experiment_1_Data_Filtered$Feedback + Experiment_1_Data_Filtered$Lineup.Condition, data = Experiment_1_Data_Filtered)
+
 ## Barplot
 Tatt_by_Lineup_by_PreID <- xtabs(~ Tatt.in.Any + Lineup.Condition + Describe.Before, data = Experiment_1_Data_Filtered)
 

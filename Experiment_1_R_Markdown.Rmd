@@ -232,3 +232,14 @@ vtree(Experiment_1_Data_Filtered,
                   Describe.Before = "Pre-ID Description"), 
       horiz=FALSE)
 ```
+
+
+## Logistic Regression
+
+Let's do a logistic regression with "Tatt.in.Any" with "Describe.Before", "Feedback", and "Lineup.Condition" as covariates.
+
+```{r, }
+glm(formula = Tatt.in.Any ~ Describe.Before + Feedback + Lineup.Condition, family = binomial(link="logit"), data = Experiment_1_Data_Filtered)
+```
+
+
