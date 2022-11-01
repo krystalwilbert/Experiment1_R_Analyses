@@ -236,10 +236,12 @@ vtree(Experiment_1_Data_Filtered,
 
 ## Logistic Regression
 
-Let's do a logistic regression with "Tatt.in.Any" with "Describe.Before", "Feedback", and "Lineup.Condition" as covariates.
+Let's do a logistic regression with "Tatt.in.Any" as the dependent variable with "Describe.Before", "Feedback", and "Lineup.Condition" as covariates.
 
-```{r, }
-glm(formula = Tatt.in.Any ~ Describe.Before + Feedback + Lineup.Condition, family = binomial(link="logit"), data = Experiment_1_Data_Filtered)
+```{r, echo = TRUE}
+tdfl_glm <- glm(formula = Tatt.in.Any ~ Describe.Before + Feedback + Lineup.Condition, family = binomial(link="logit"), data = Experiment_1_Data_Filtered)
+
+summary(tdfl_glm)
 ```
 
 
